@@ -193,7 +193,7 @@ def patch_vm_health_dashboard(path, mapping_list):
             entries = []
             options = []
             for entry in mapping_list:
-                label = f"{entry['model']} ({entry['provider']}, {entry['vm_type']})"
+                label = f"{entry['model']} ({entry['provider']} - {entry['vm_type']})"
                 value = entry['guid']
                 entries.append(f"{label} : {value}")
                 options.append({
