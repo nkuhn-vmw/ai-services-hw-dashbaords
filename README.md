@@ -71,6 +71,40 @@ Then import the patched dashboard JSON files.
 
 ---
 
+### AI Services - AI Server Health
+
+**File:** `ai-services-ai-server-health-dashboard.json`
+
+Application-level health monitoring for the AI Server process, covering JVM internals, HTTP traffic, database connection pooling, and the controller VM.
+
+#### Features
+
+- **Server Overview** - controller VM health, process uptime, CPU usage, live threads, GC overhead, open file descriptors, log errors/warnings
+- **HTTP Traffic** - request rate by status code (2xx/4xx/5xx), avg response time by endpoint, request rate by endpoint, 5xx error rate with threshold
+- **JVM Memory** - heap used vs committed, non-heap used vs committed, heap breakdown by memory pool (Eden/Survivor/Old Gen), GC pause rate & duration
+- **Database Connection Pool (HikariCP)** - active/idle/pending/max connections, connection acquire/usage/creation time, pool timeouts, Spring Data repository duration
+- **Threads & Logging** - thread states (runnable, waiting, blocked), log events by level (error, warn, info, debug)
+- **Controller VM Resources** - CPU, memory, and disk utilization for the controller VM
+- Links to **LLM Performance**, **VM Model Health**, and **Token Billback** dashboards
+
+#### Metrics used
+
+| Metric | Description |
+|--------|-------------|
+| `jvm_memory_used_bytes`, `jvm_memory_committed_bytes` | JVM heap and non-heap memory |
+| `jvm_gc_pause_seconds_count/sum` | Garbage collection frequency and duration |
+| `jvm_threads_live_threads`, `jvm_threads_states_threads` | JVM thread counts by state |
+| `hikaricp_connections_active/idle/pending/max` | HikariCP database connection pool |
+| `hikaricp_connections_acquire/usage/creation_seconds` | Connection timing metrics |
+| `hikaricp_connections_timeout_total` | Pool timeout events |
+| `http_server_requests_seconds_count/sum` | HTTP request count and duration by status, URI, method |
+| `spring_data_repository_invocations_seconds` | Spring Data repository operation duration |
+| `logback_events_total` | Log event counts by level |
+| `process_cpu_usage`, `process_uptime_seconds` | Process-level CPU and uptime |
+| `system_cpu_user`, `system_mem_percent`, `system_disk_*_percent` | Controller VM resources |
+
+---
+
 ### AI Services - LLM Performance
 
 **File:** `ai-services-llm-performance-dashboard.json`
