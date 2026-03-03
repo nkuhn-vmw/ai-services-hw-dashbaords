@@ -3,32 +3,36 @@
 # configure-vm-model-mapping.sh
 #
 # Queries OpsManager to discover the VM-to-model mapping for the GenAI tile,
-# then patches the LLM Performance dashboard JSON so VM panels show model names
-# instead of BOSH job UUIDs.
+# then patches dashboard JSON files so VM panels show model names instead of
+# BOSH job UUIDs.
+#
+# Patches two dashboards:
+#   - ai-services-vm-model-health-dashboard.json: Populates the Model dropdown
+#     with model names (value = VM UUID), adds label_replace for legends, and
+#     value mappings on the table.
+#   - ai-services-llm-performance-dashboard.json: Adds label_replace chains to
+#     any remaining VM panels and value mappings to the table.
 #
 # Usage:
-#   ./scripts/configure-vm-model-mapping.sh -e <om-env-file> [-d <dashboard-json>]
+#   ./scripts/configure-vm-model-mapping.sh -e <om-env-file>
 #
 # Prerequisites:
 #   - om CLI (https://github.com/pivotal-cf/om)
 #   - jq
-#   - python3 (for JSON patching)
+#   - python3
 #
 # Example:
 #   ./scripts/configure-vm-model-mapping.sh -e env.yml
-#   ./scripts/configure-vm-model-mapping.sh -e env.yml -d my-dashboard.json
 
 set -euo pipefail
 
-DASHBOARD_FILE="ai-services-llm-performance-dashboard.json"
 OM_ENV=""
 
 usage() {
-  echo "Usage: $0 -e <om-env-file> [-d <dashboard-json>]"
+  echo "Usage: $0 -e <om-env-file>"
   echo ""
   echo "Options:"
   echo "  -e  Path to om CLI environment file (required)"
-  echo "  -d  Path to dashboard JSON file (default: ${DASHBOARD_FILE})"
   echo ""
   echo "The om env file should contain:"
   echo "  ---"
@@ -39,10 +43,9 @@ usage() {
   exit 1
 }
 
-while getopts "e:d:h" opt; do
+while getopts "e:h" opt; do
   case $opt in
     e) OM_ENV="$OPTARG" ;;
-    d) DASHBOARD_FILE="$OPTARG" ;;
     h) usage ;;
     *) usage ;;
   esac
@@ -58,22 +61,14 @@ if [[ ! -f "$OM_ENV" ]]; then
   exit 1
 fi
 
-# Find the dashboard file (check current dir and repo root)
+# Find the repo root
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
-if [[ ! -f "$DASHBOARD_FILE" ]]; then
-  if [[ -f "$REPO_DIR/$DASHBOARD_FILE" ]]; then
-    DASHBOARD_FILE="$REPO_DIR/$DASHBOARD_FILE"
-  else
-    echo "Error: Dashboard file not found: $DASHBOARD_FILE"
-    echo "Run this script from the repo root or specify -d <path>"
-    exit 1
-  fi
-fi
+VM_HEALTH_DASHBOARD="$REPO_DIR/ai-services-vm-model-health-dashboard.json"
+LLM_PERF_DASHBOARD="$REPO_DIR/ai-services-llm-performance-dashboard.json"
 
 echo "==> Using om env: $OM_ENV"
-echo "==> Dashboard file: $DASHBOARD_FILE"
 
 # Step 1: Find the genai product installation name
 echo ""
@@ -108,7 +103,7 @@ MAPPING=$(echo "$PROPS" | jq -r '
 NUM_MODELS=$(echo "$MAPPING" | jq length)
 if [[ "$NUM_MODELS" -eq 0 ]]; then
   echo "Warning: No models found in tile properties."
-  echo "The dashboard will continue to show VM UUIDs."
+  echo "Dashboards will continue to show VM UUIDs."
   exit 0
 fi
 
@@ -116,38 +111,32 @@ echo ""
 echo "    Found $NUM_MODELS model(s):"
 echo "$MAPPING" | jq -r '.[] | "    \(.guid) -> \(.provider)/\(.model) (\(.vm_type))"'
 
-# Step 4: Generate the label_replace chain and value mappings, then patch the dashboard
+# Step 4: Patch dashboards
 echo ""
-echo "==> Patching dashboard with model name mappings..."
 
-python3 - "$DASHBOARD_FILE" "$MAPPING" << 'PYTHON_SCRIPT'
+python3 - "$VM_HEALTH_DASHBOARD" "$LLM_PERF_DASHBOARD" "$MAPPING" << 'PYTHON_SCRIPT'
 import json
 import sys
-import re
+import os
 
-dashboard_path = sys.argv[1]
-mapping = json.loads(sys.argv[2])
+vm_health_path = sys.argv[1]
+llm_perf_path = sys.argv[2]
+mapping = json.loads(sys.argv[3])
 
-with open(dashboard_path, 'r') as f:
-    dashboard = json.load(f)
 
-# Build the label_replace wrapper for a given base expression
 def build_label_replace_chain(base_expr, mapping_list):
     """Wrap base_expr in nested label_replace calls to add a 'model_name' label."""
     expr = base_expr
     for entry in mapping_list:
         guid = entry['guid']
         model = entry['model']
-        # Escape special regex chars in GUID (hyphens are fine in character class context)
-        escaped_guid = guid.replace('-', '\\\\-')
-        # Wrap in label_replace - each one checks if exported_job matches the GUID
         expr = (
             f'label_replace({expr}, '
             f'"model_name", "{model}", "exported_job", "{guid}")'
         )
     return expr
 
-# Build value mappings for the table panel
+
 def build_value_mappings(mapping_list):
     """Create Grafana value mappings for exported_job -> model name."""
     options = {}
@@ -158,78 +147,142 @@ def build_value_mappings(mapping_list):
         }
     return {"type": "value", "options": options}
 
-# VM panel IDs (50-54 are time series, 55 is table)
-VM_TIMESERIES_IDS = {50, 51, 52, 53, 54}
-VM_TABLE_ID = 55
 
-for panel in dashboard.get('panels', []):
-    panel_id = panel.get('id')
+def add_table_value_mappings(panel, mapping_list):
+    """Add value mappings and update display name for exported_job in a table panel."""
+    vm_value_mapping = build_value_mappings(mapping_list)
+    overrides = panel.get('fieldConfig', {}).get('overrides', [])
 
-    if panel_id in VM_TIMESERIES_IDS:
-        # Update each target's expr with label_replace chain
-        for target in panel.get('targets', []):
-            original_expr = target.get('expr', '')
-            wrapped_expr = build_label_replace_chain(original_expr, mapping)
-            target['expr'] = wrapped_expr
-            # Update legend to use model_name instead of exported_job
-            target['legendFormat'] = '{{model_name}} ({{ip}})'
-
-    elif panel_id == VM_TABLE_ID:
-        # For the table panel, add value mappings for the exported_job column
-        vm_value_mapping = build_value_mappings(mapping)
-
-        # Find the exported_job override and add value mappings
-        overrides = panel.get('fieldConfig', {}).get('overrides', [])
-
-        # Check if there's already an exported_job override
-        found_ej_override = False
-        for override in overrides:
-            matcher = override.get('matcher', {})
-            if matcher.get('id') == 'byName' and matcher.get('options') == 'exported_job':
-                found_ej_override = True
-                # Add value mappings property
-                override['properties'].append({
-                    "id": "mappings",
-                    "value": [vm_value_mapping]
-                })
-                break
-
-        if not found_ej_override:
-            # Create new override for exported_job with display name and value mappings
-            overrides.append({
-                "matcher": {"id": "byName", "options": "exported_job"},
-                "properties": [
-                    {"id": "displayName", "value": "VM / Model"},
-                    {"id": "mappings", "value": [vm_value_mapping]}
-                ]
+    found = False
+    for override in overrides:
+        matcher = override.get('matcher', {})
+        if matcher.get('id') == 'byName' and matcher.get('options') == 'exported_job':
+            found = True
+            override['properties'].append({
+                "id": "mappings",
+                "value": [vm_value_mapping]
             })
+            for prop in override.get('properties', []):
+                if prop.get('id') == 'displayName':
+                    prop['value'] = 'VM / Model'
+            break
 
-        # Also update the existing "VM Job" override to show "VM / Model"
-        for override in overrides:
-            matcher = override.get('matcher', {})
-            if matcher.get('id') == 'byName' and matcher.get('options') == 'exported_job':
-                for prop in override.get('properties', []):
-                    if prop.get('id') == 'displayName':
-                        prop['value'] = 'VM / Model'
+    if not found:
+        overrides.append({
+            "matcher": {"id": "byName", "options": "exported_job"},
+            "properties": [
+                {"id": "displayName", "value": "VM / Model"},
+                {"id": "mappings", "value": [vm_value_mapping]}
+            ]
+        })
 
-with open(dashboard_path, 'w') as f:
-    json.dump(dashboard, f, indent=2)
-    f.write('\n')
 
-print(f"    Patched {len(mapping)} model mappings into {dashboard_path}")
+def patch_vm_health_dashboard(path, mapping_list):
+    """Patch the VM Model Health dashboard: populate Model variable and add legends."""
+    if not os.path.exists(path):
+        print(f"    Skipping {os.path.basename(path)} (file not found)")
+        return
+
+    with open(path, 'r') as f:
+        dashboard = json.load(f)
+
+    # 1. Replace the custom Model variable with real model:UUID entries
+    for var in dashboard.get('templating', {}).get('list', []):
+        if var.get('name') == 'Model' and var.get('type') == 'custom':
+            # Build the custom query string: "Label1 : value1, Label2 : value2"
+            entries = []
+            options = []
+            for entry in mapping_list:
+                label = f"{entry['model']} ({entry['provider']}, {entry['vm_type']})"
+                value = entry['guid']
+                entries.append(f"{label} : {value}")
+                options.append({
+                    "selected": False,
+                    "text": label,
+                    "value": value
+                })
+
+            var['query'] = ", ".join(entries)
+            var['options'] = [
+                {"selected": True, "text": "All", "value": "$__all"}
+            ] + options
+            var['current'] = {"selected": True, "text": "All", "value": "$__all"}
+            var['description'] = "Select a model to see only the VMs serving it."
+            break
+
+    # 2. Add label_replace chains to time series panels and update legends
+    TABLE_ID = 50
+    for panel in dashboard.get('panels', []):
+        panel_id = panel.get('id')
+        panel_type = panel.get('type')
+
+        if panel_type == 'timeseries':
+            for target in panel.get('targets', []):
+                original_expr = target.get('expr', '')
+                if 'deployment="genai-models"' in original_expr:
+                    target['expr'] = build_label_replace_chain(original_expr, mapping_list)
+                    target['legendFormat'] = '{{model_name}} ({{ip}})'
+
+        elif panel_id == TABLE_ID:
+            add_table_value_mappings(panel, mapping_list)
+
+    with open(path, 'w') as f:
+        json.dump(dashboard, f, indent=2)
+        f.write('\n')
+
+    print(f"==> Patched {os.path.basename(path)}: Model dropdown + {len(mapping_list)} model legends")
+
+
+def patch_llm_perf_dashboard(path, mapping_list):
+    """Patch the LLM Performance dashboard: label_replace on any remaining VM panels."""
+    if not os.path.exists(path):
+        print(f"    Skipping {os.path.basename(path)} (file not found)")
+        return
+
+    with open(path, 'r') as f:
+        dashboard = json.load(f)
+
+    patched = 0
+    for panel in dashboard.get('panels', []):
+        panel_type = panel.get('type')
+
+        if panel_type == 'timeseries':
+            for target in panel.get('targets', []):
+                expr = target.get('expr', '')
+                if 'deployment="genai-models"' in expr or 'deployment=~"genai' in expr:
+                    target['expr'] = build_label_replace_chain(expr, mapping_list)
+                    target['legendFormat'] = '{{model_name}} ({{ip}})'
+                    patched += 1
+
+        elif panel_type == 'table':
+            # Check if it queries genai deployment
+            for target in panel.get('targets', []):
+                if 'genai' in target.get('expr', ''):
+                    add_table_value_mappings(panel, mapping_list)
+                    patched += 1
+                    break
+
+    with open(path, 'w') as f:
+        json.dump(dashboard, f, indent=2)
+        f.write('\n')
+
+    if patched > 0:
+        print(f"==> Patched {os.path.basename(path)}: {patched} VM-related queries")
+    else:
+        print(f"==> {os.path.basename(path)}: No VM panels found (already removed?)")
+
+
+# Patch both dashboards
+patch_vm_health_dashboard(vm_health_path, mapping)
+patch_llm_perf_dashboard(llm_perf_path, mapping)
+
 PYTHON_SCRIPT
 
 echo ""
-echo "==> Done! The dashboard now shows model names on VM panels."
+echo "==> Done! Dashboards updated with model name mappings."
 echo ""
-echo "To deploy to Grafana:"
-echo "  1. Log in to Grafana at https://grafana.<SYSTEM_DOMAIN>"
-echo "  2. Navigate to Dashboards > Import"
-echo "  3. Paste the contents of $DASHBOARD_FILE"
-echo "  4. Click Load, then Import (overwrite existing)"
+echo "To deploy to Grafana, import the dashboard JSON files:"
+echo "  - $VM_HEALTH_DASHBOARD"
+echo "  - $LLM_PERF_DASHBOARD"
 echo ""
-echo "Or deploy via API:"
-echo "  curl -sk -X POST https://grafana.<SYSTEM_DOMAIN>/api/dashboards/db \\"
-echo "    -H 'Content-Type: application/json' \\"
-echo "    -u 'admin:<password>' \\"
-echo "    -d '{\"dashboard\": <dashboard-json>, \"overwrite\": true}'"
+echo "Via Grafana UI: Dashboards > New > Import > paste JSON > Load > Import"

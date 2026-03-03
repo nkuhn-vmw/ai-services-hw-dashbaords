@@ -39,15 +39,15 @@ This works for any space that has at least one running app instance. The collaps
 3. Copy the contents of the desired dashboard JSON and paste into the **Import via panel json** window
 4. Click **Load**, then **Import**
 
-Both dashboards use the default Prometheus datasource (`"uid": null`), which auto-connects to Healthwatch's Prometheus.
+All dashboards use the default Prometheus datasource (`"uid": null`), which auto-connects to Healthwatch's Prometheus.
 
-**For the LLM Performance dashboard:** To show model names on VM panels instead of UUIDs, run the mapping script before importing:
+**For the VM Model Health dashboard:** Run the mapping script before importing to populate the Model dropdown with your foundation's models:
 
 ```bash
 ./scripts/configure-vm-model-mapping.sh -e /path/to/om-env.yml
 ```
 
-Then import the patched `ai-services-llm-performance-dashboard.json`.
+Then import the patched dashboard JSON files.
 
 ## Metrics Used
 
@@ -75,7 +75,7 @@ Then import the patched `ai-services-llm-performance-dashboard.json`.
 
 **File:** `ai-services-llm-performance-dashboard.json`
 
-A centralized operations dashboard for monitoring LLM health and performance. Select a model (e.g., `openai/gpt-oss-120b`) and see consolidated performance across all plans/endpoints serving it, plus the underlying VM resources.
+A centralized operations dashboard for monitoring LLM health and performance. Select a model (e.g., `openai/gpt-oss-120b`) and see consolidated performance across all plans/endpoints serving it.
 
 #### Features
 
@@ -85,25 +85,50 @@ A centralized operations dashboard for monitoring LLM health and performance. Se
 - **Token throughput** - input/output tokens per minute, broken down by model
 - **Error analysis** - errors by type (TooManyRequests, IOException, etc.), error rate by model with 5% threshold line
 - **Per-endpoint breakdown** - request rate and response time by service plan/endpoint
-- **Model-serving VM resources** - CPU, memory, system load, persistent/ephemeral disk usage for the `genai-models` BOSH deployment VMs, labeled with model names
-- **VM status table** - at-a-glance table of all GenAI VMs with health, CPU, memory, load, disk, and swap
+- Links to the **VM Model Health** dashboard for underlying VM resources
+
+#### Metrics used
+
+| Metric | Description |
+|--------|-------------|
+| `ai_server_requests_seconds_count/sum` | Request count and total duration (has `error` label) |
+| `ai_server_requests_active_seconds_max` | Max active request duration |
+| `gen_ai_server_time_to_first_token_seconds_count/sum` | Time to first token (TTFT) |
+| `gen_ai_client_operation_seconds_count/sum` | Client-side operation duration |
+| `ai_server_client_token_usage_total` | Token consumption (input/output) |
+
+---
+
+### AI Services - VM Model Health
+
+**File:** `ai-services-vm-model-health-dashboard.json`
+
+Detailed VM-level health and resource monitoring for the BOSH VMs serving LLM models. Select a model from the dropdown to see only the VMs running that model (a model can have 1-10+ worker VMs).
+
+#### Features
+
+- **Model dropdown** - select a model to filter to only its VMs; shows model name, provider (vllm/ollama), and VM type
+- **Health summary** - VM count, health status, avg CPU/memory/load/disk, max swap
+- **CPU & Load** - per-VM CPU utilization and system load over time
+- **Memory** - per-VM memory percentage and absolute usage
+- **Disk** - persistent, ephemeral, and system disk usage per VM
+- **Swap** - swap usage over time (high swap degrades inference performance)
+- **VM status table** - at-a-glance table with health, CPU, memory, load, disk, and swap
 
 #### VM-to-Model name mapping
 
-The `genai-models` BOSH VMs use UUID job names (`exported_job` label) with no built-in association to the LLM model they serve. The included script `scripts/configure-vm-model-mapping.sh` queries OpsManager to discover this mapping and patches the dashboard JSON so VM panels display model names (e.g., `openai/gpt-oss-120b`) instead of UUIDs.
+The `genai-models` BOSH VMs use UUID job names (`exported_job` label) with no built-in association to the LLM model they serve. The included script `scripts/configure-vm-model-mapping.sh` queries OpsManager to discover this mapping and patches both dashboard JSON files:
 
-**How it works:** The GenAI tile stores model configurations in `.errands.vllm_models` and `.errands.ollama_models` tile properties. Each model config contains a `guid` field that matches the BOSH VM `exported_job` label. The script extracts these GUIDs and patches the dashboard with:
-- `label_replace` PromQL functions on time series panels to add a `model_name` label
-- Grafana value mappings on the VM status table to display model names
+- **VM Model Health dashboard**: Populates the Model dropdown with `model_name : vm_uuid` entries, adds `label_replace` chains for model-name legends, and value mappings on the table
+- **LLM Performance dashboard**: Applies model-name labels to any remaining VM-related queries
+
+**How it works:** The GenAI tile stores model configurations in `.errands.vllm_models` and `.errands.ollama_models` tile properties. Each model config contains a `guid` field that matches the BOSH VM `exported_job` label.
 
 **Usage:**
 
 ```bash
 # Requires: om CLI, jq, python3
 ./scripts/configure-vm-model-mapping.sh -e /path/to/om-env.yml
-
-# With custom dashboard path
-./scripts/configure-vm-model-mapping.sh -e /path/to/om-env.yml -d /path/to/dashboard.json
 ```
 
 The om env file should contain your OpsManager connection details:
@@ -116,10 +141,10 @@ password: <password>
 skip-ssl-validation: true
 ```
 
-**Re-running after model changes:** If models are added, removed, or reconfigured in the AI Services tile, restore the clean dashboard from git and re-run:
+**Re-running after model changes:** If models are added, removed, or reconfigured in the AI Services tile, restore the clean dashboards from git and re-run:
 
 ```bash
-git checkout -- ai-services-llm-performance-dashboard.json
+git checkout -- ai-services-vm-model-health-dashboard.json ai-services-llm-performance-dashboard.json
 ./scripts/configure-vm-model-mapping.sh -e /path/to/om-env.yml
 ```
 
@@ -127,14 +152,11 @@ git checkout -- ai-services-llm-performance-dashboard.json
 
 | Metric | Description |
 |--------|-------------|
-| `ai_server_requests_seconds_count/sum` | Request count and total duration (has `error` label) |
-| `ai_server_requests_active_seconds_max` | Max active request duration |
-| `gen_ai_server_time_to_first_token_seconds_count/sum` | Time to first token (TTFT) |
-| `gen_ai_client_operation_seconds_count/sum` | Client-side operation duration |
-| `ai_server_client_token_usage_total` | Token consumption (input/output) |
 | `system_cpu_user`, `system_cpu_sys` | BOSH VM CPU utilization |
 | `system_mem_percent`, `system_mem_kb` | BOSH VM memory utilization |
 | `system_load_1m` | BOSH VM system load average |
 | `system_disk_persistent_percent` | BOSH VM persistent disk (model storage) |
 | `system_disk_ephemeral_percent` | BOSH VM ephemeral disk |
+| `system_disk_system_percent` | BOSH VM system disk |
+| `system_swap_percent` | BOSH VM swap usage |
 | `system_healthy` | BOSH VM health status |

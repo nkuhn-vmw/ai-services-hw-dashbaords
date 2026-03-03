@@ -15,6 +15,7 @@
       }
     ]
   },
+  "description": "Detailed VM-level health and resource metrics for model-serving VMs in the GenAI BOSH deployment. Select a model to see only the VMs serving it. Run scripts/configure-vm-model-mapping.sh to populate the Model dropdown with your foundation's model-to-VM mapping.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
@@ -26,9 +27,20 @@
       "keepTime": true,
       "tags": [],
       "targetBlank": false,
-      "title": "VM Model Health",
+      "title": "LLM Performance",
       "type": "link",
-      "url": "/d/hw2-ai-vm-health/ai-services-vm-model-health"
+      "url": "/d/hw2-ai-llm-perf/ai-services-llm-performance"
+    },
+    {
+      "asDropdown": false,
+      "icon": "dashboard",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [],
+      "targetBlank": false,
+      "title": "Token Billback",
+      "type": "link",
+      "url": "/d/hw2-ai-billback/ai-services-token-usage-billback"
     }
   ],
   "panels": [
@@ -42,8 +54,73 @@
       },
       "id": 100,
       "panels": [],
-      "title": "Health & Summary",
+      "title": "Health Summary",
       "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "count(system_healthy{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "VMs",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "VM Count",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -89,10 +166,10 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 0,
+        "x": 3,
         "y": 1
       },
-      "id": 1,
+      "id": 2,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -117,77 +194,14 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "min(system_healthy{deployment=~\"genai.*\"})",
-          "legendFormat": "GenAI Health",
-          "range": true,
+          "expr": "min(system_healthy{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Health",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
-      "title": "GenAI VMs Health",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 3,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "11.1.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum(increase(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[$__range]))",
-          "legendFormat": "Requests",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Successful Requests",
+      "title": "All VMs Healthy",
       "type": "stat"
     },
     {
@@ -210,15 +224,15 @@
               },
               {
                 "color": "yellow",
-                "value": 1
+                "value": 70
               },
               {
                 "color": "red",
-                "value": 5
+                "value": 90
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -253,13 +267,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error!=\"none\"}[$__range])) / sum(increase(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
-          "legendFormat": "Error Rate",
+          "expr": "avg(system_cpu_user{deployment=\"genai-models\", exported_job=~\"$Model\"} + system_cpu_sys{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Avg CPU",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Error Rate",
+      "title": "Avg CPU %",
       "type": "stat"
     },
     {
@@ -282,15 +296,15 @@
               },
               {
                 "color": "yellow",
-                "value": 5
+                "value": 70
               },
               {
                 "color": "red",
-                "value": 15
+                "value": 90
               }
             ]
           },
-          "unit": "s"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -325,13 +339,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_requests_seconds_sum{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[$__range])) / sum(increase(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[$__range]))",
-          "legendFormat": "Avg Response",
+          "expr": "avg(system_mem_percent{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Avg Mem",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Avg Response Time",
+      "title": "Avg Memory %",
       "type": "stat"
     },
     {
@@ -354,15 +368,15 @@
               },
               {
                 "color": "yellow",
-                "value": 3
+                "value": 8
               },
               {
                 "color": "red",
-                "value": 10
+                "value": 16
               }
             ]
           },
-          "unit": "s"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -397,13 +411,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum(increase(gen_ai_server_time_to_first_token_seconds_sum{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range])) / sum(increase(gen_ai_server_time_to_first_token_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
-          "legendFormat": "Avg TTFT",
+          "expr": "avg(system_load_1m{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Avg Load",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Avg Time to First Token",
+      "title": "Avg Load (1m)",
       "type": "stat"
     },
     {
@@ -421,12 +435,20 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "blue",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
               }
             ]
           },
-          "unit": "short"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -461,13 +483,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
-          "legendFormat": "Input Tokens",
+          "expr": "avg(system_disk_persistent_percent{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Avg Disk",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Input Tokens",
+      "title": "Avg Persistent Disk %",
       "type": "stat"
     },
     {
@@ -487,10 +509,18 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
               }
             ]
           },
-          "unit": "short"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -525,13 +555,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
-          "legendFormat": "Output Tokens",
+          "expr": "avg(system_disk_ephemeral_percent{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Avg Ephemeral",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Output Tokens",
+      "title": "Avg Ephemeral Disk %",
       "type": "stat"
     },
     {
@@ -549,12 +579,20 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "purple",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 50
               }
             ]
           },
-          "unit": "short"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -589,14 +627,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "count(count by(ai_server_endpoint) (ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}))",
-          "legendFormat": "Plans",
-          "instant": true,
-          "range": false,
+          "expr": "max(system_swap_percent{deployment=\"genai-models\", exported_job=~\"$Model\"})",
+          "legendFormat": "Max Swap",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Active Plans",
+      "title": "Max Swap %",
       "type": "stat"
     },
     {
@@ -609,7 +646,7 @@
       },
       "id": 101,
       "panels": [],
-      "title": "Request Performance",
+      "title": "CPU & System Load",
       "type": "row"
     },
     {
@@ -617,6 +654,7 @@
         "type": "prometheus",
         "uid": null
       },
+      "description": "CPU utilization (user + system) per VM serving the selected model.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -626,736 +664,11 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "req/min",
+            "axisLabel": "%",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "reqps"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 6
-      },
-      "id": 10,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model) (rate(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[5m]))",
-          "legendFormat": "{{ai_server_advertised_model}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Request Rate by Model",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 6
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model) (rate(ai_server_requests_seconds_sum{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[5m])) / sum by(ai_server_advertised_model) (rate(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[5m]))",
-          "legendFormat": "{{ai_server_advertised_model}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Avg Response Time by Model",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 14
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model) (rate(gen_ai_server_time_to_first_token_seconds_sum{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m])) / sum by(ai_server_advertised_model) (rate(gen_ai_server_time_to_first_token_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m]))",
-          "legendFormat": "{{ai_server_advertised_model}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Avg Time to First Token (TTFT) by Model",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "smooth",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 14
-      },
-      "id": 13,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "max by(ai_server_advertised_model) (ai_server_requests_active_seconds_max{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"})",
-          "legendFormat": "{{ai_server_advertised_model}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Max Active Request Duration by Model",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 22
-      },
-      "id": 102,
-      "panels": [],
-      "title": "Token Throughput",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "tokens/min",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 50,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": ".*input.*"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": ".*output.*"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 23
-      },
-      "id": 20,
-      "options": {
-        "legend": {
-          "calcs": [
-            "sum",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m])) * 60",
-          "legendFormat": "input tokens/min",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m])) * 60",
-          "legendFormat": "output tokens/min",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Token Throughput (tokens/min)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "tokens/min",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 50,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 23
-      },
-      "id": 21,
-      "options": {
-        "legend": {
-          "calcs": [
-            "sum",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model) (rate(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m])) * 60",
-          "legendFormat": "{{ai_server_advertised_model}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Token Throughput by Model (tokens/min)",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 31
-      },
-      "id": 103,
-      "panels": [],
-      "title": "Errors",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 70,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 32
-      },
-      "id": 30,
-      "options": {
-        "legend": {
-          "calcs": [
-            "sum"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": null
-          },
-          "editorMode": "code",
-          "expr": "sum by(error) (increase(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error!=\"none\"}[5m]))",
-          "legendFormat": "{{error}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Errors by Type",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": null
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 15,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1389,26 +702,28 @@
               },
               {
                 "color": "red",
-                "value": 0.05
+                "value": 90
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percent",
+          "max": 100
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 32
+        "x": 0,
+        "y": 6
       },
-      "id": 31,
+      "id": 10,
       "options": {
         "legend": {
           "calcs": [
             "mean",
-            "max"
+            "max",
+            "lastNotNull"
           ],
           "displayMode": "table",
           "placement": "bottom",
@@ -1426,13 +741,109 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model) (rate(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error!=\"none\"}[5m])) / sum by(ai_server_advertised_model) (rate(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m]))",
-          "legendFormat": "{{ai_server_advertised_model}}",
+          "expr": "system_cpu_user{deployment=\"genai-models\", exported_job=~\"$Model\"} + system_cpu_sys{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Error Rate by Model (5% threshold)",
+      "title": "CPU Usage (User + Sys) per VM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "System load average (1 minute) per VM. Values above the CPU core count indicate saturation.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "load",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_load_1m{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "System Load (1m avg) per VM",
       "type": "timeseries"
     },
     {
@@ -1441,11 +852,11 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 14
       },
-      "id": 104,
+      "id": 102,
       "panels": [],
-      "title": "Per-Endpoint Breakdown",
+      "title": "Memory",
       "type": "row"
     },
     {
@@ -1453,6 +864,7 @@
         "type": "prometheus",
         "uid": null
       },
+      "description": "Memory utilization percentage per VM serving the selected model.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1462,11 +874,11 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "%",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 15,
+            "fillOpacity": 20,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1487,7 +899,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line+area"
             }
           },
           "mappings": [],
@@ -1495,12 +907,17 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "transparent",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 90
               }
             ]
           },
-          "unit": "reqps"
+          "unit": "percent",
+          "max": 100
         },
         "overrides": []
       },
@@ -1508,14 +925,15 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 15
       },
-      "id": 40,
+      "id": 20,
       "options": {
         "legend": {
           "calcs": [
             "mean",
-            "max"
+            "max",
+            "lastNotNull"
           ],
           "displayMode": "table",
           "placement": "bottom",
@@ -1533,13 +951,13 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum by(ai_server_endpoint) (rate(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[5m]))",
-          "legendFormat": "{{ai_server_endpoint}}",
+          "expr": "system_mem_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Request Rate by Endpoint (Plan)",
+      "title": "Memory Usage % per VM",
       "type": "timeseries"
     },
     {
@@ -1547,6 +965,7 @@
         "type": "prometheus",
         "uid": null
       },
+      "description": "Memory used in bytes per VM serving the selected model.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1594,7 +1013,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "deckbytes"
         },
         "overrides": []
       },
@@ -1602,14 +1021,15 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 15
       },
-      "id": 41,
+      "id": 21,
       "options": {
         "legend": {
           "calcs": [
             "mean",
-            "max"
+            "max",
+            "lastNotNull"
           ],
           "displayMode": "table",
           "placement": "bottom",
@@ -1627,14 +1047,918 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "sum by(ai_server_endpoint) (rate(ai_server_requests_seconds_sum{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[5m])) / sum by(ai_server_endpoint) (rate(ai_server_requests_seconds_count{ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", error=\"none\"}[5m]))",
-          "legendFormat": "{{ai_server_endpoint}}",
+          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"} * 1024",
+          "legendFormat": "{{exported_job}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Avg Response Time by Endpoint (Plan)",
+      "title": "Memory Used per VM",
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 103,
+      "panels": [],
+      "title": "Disk",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Persistent disk usage for model storage on the selected VMs.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "%",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent",
+          "max": 100
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 24
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_disk_persistent_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Persistent Disk % per VM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Ephemeral disk usage per VM serving the selected model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "%",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent",
+          "max": 100
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 24
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_disk_ephemeral_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Ephemeral Disk % per VM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "System disk usage per VM serving the selected model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "%",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent",
+          "max": 100
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 24
+      },
+      "id": 32,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_disk_system_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "System Disk % per VM",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 32
+      },
+      "id": 104,
+      "panels": [],
+      "title": "Swap & VM Details",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Swap usage per VM. High swap usage can severely degrade model inference performance.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "%",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "percent",
+          "max": 100
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_swap_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "legendFormat": "{{exported_job}} ({{ip}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Swap Usage % per VM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Detailed status of all VMs serving the selected model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Health"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Health"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #CPU"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "CPU %"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Mem"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Memory %"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #MemKB"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Memory Used"
+              },
+              {
+                "id": "unit",
+                "value": "deckbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Load"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Load 1m"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #PersistDisk"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Persist Disk %"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #EphDisk"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Ephemeral Disk %"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Swap"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Swap %"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "exported_job"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "VM Job"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ip"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "IP"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "index"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Index"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "deployment"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "instance"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "job"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "scrape_instance_group"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "product"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "system_domain"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "origin"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source_id"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unit"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "id": 50,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "IP"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_healthy{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Health"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_cpu_user{deployment=\"genai-models\", exported_job=~\"$Model\"} + system_cpu_sys{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "CPU"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_mem_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Mem"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"} * 1024",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "MemKB"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_load_1m{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Load"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_disk_persistent_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "PersistDisk"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_disk_ephemeral_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "EphDisk"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "system_swap_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Swap"
+        }
+      ],
+      "title": "VM Status Detail",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "30s",
@@ -1643,57 +1967,33 @@
     "Healthwatch",
     "AI Services",
     "LLM",
-    "Performance"
+    "VM",
+    "GPU"
   ],
   "templating": {
     "list": [
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": null
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
         },
-        "definition": "label_values(ai_server_client_token_usage_total, ai_server_advertised_model)",
-        "description": "Select one or more LLM models. All plans/endpoints serving this model are consolidated.",
+        "description": "Select a model to filter VMs. Run scripts/configure-vm-model-mapping.sh to populate with your foundation's models.",
         "hide": 0,
         "includeAll": true,
+        "allValue": ".*",
         "label": "Model",
         "multi": true,
         "name": "Model",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(ai_server_client_token_usage_total, ai_server_advertised_model)",
-          "refId": "PrometheusVariableQueryEditor-Model"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": null
-        },
-        "definition": "label_values(ai_server_client_token_usage_total{ai_server_advertised_model=~\"$Model\"}, ai_server_endpoint)",
-        "description": "Filter by specific service endpoint/plan. Chained from Model selection.",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Endpoint / Plan",
-        "multi": true,
-        "name": "Endpoint",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(ai_server_client_token_usage_total{ai_server_advertised_model=~\"$Model\"}, ai_server_endpoint)",
-          "refId": "PrometheusVariableQueryEditor-Endpoint"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          }
+        ],
+        "query": "",
+        "type": "custom"
       }
     ]
   },
@@ -1703,8 +2003,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "AI Services - LLM Performance",
-  "uid": "hw2-ai-llm-perf",
+  "title": "AI Services - VM Model Health",
+  "uid": "hw2-ai-vm-health",
   "version": 1,
   "weekStart": ""
 }
