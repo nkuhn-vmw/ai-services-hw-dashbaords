@@ -1,6 +1,6 @@
 # AI Services Healthwatch Dashboards
 
-Grafana dashboards for token usage billing and chargeback on [VMware Tanzu AI Services](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/ai-services/10-3/ai/index.html) with [Healthwatch for Tanzu](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/healthwatch-for-vmware-tanzu/2-3/healthwatch/index.html).
+Grafana dashboards for monitoring and billing of [VMware Tanzu AI Services](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/ai-services/10-3/ai/index.html) with [Healthwatch for Tanzu](https://techdocs.broadcom.com/us/en/vmware-tanzu/platform/healthwatch-for-vmware-tanzu/2-3/healthwatch/index.html).
 
 ## Dashboards
 
@@ -60,3 +60,38 @@ The dashboard uses the default Prometheus datasource (`"uid": null`), which auto
 | `platform_cf_space_guid` | CF space GUID |
 | `platform_cf_app_guid` | CF app GUID of the consuming application |
 | `platform_cf_service_instance_guid` | CF service instance GUID |
+
+---
+
+### AI Services - LLM Performance
+
+**File:** `ai-services-llm-performance-dashboard.json`
+
+A centralized operations dashboard for monitoring LLM health and performance. Select a model (e.g., `openai/gpt-oss-120b`) and see consolidated performance across all plans/endpoints serving it, plus the underlying VM resources.
+
+#### Features
+
+- **Model & Endpoint dropdowns** - select a model to see consolidated stats across all plans mapped to it
+- **Health summary** - VM health status, request count, error rate, avg response time, avg TTFT, token counts, active plan count
+- **Request performance** - request rate, avg response time, time to first token (TTFT), max active request duration over time, all by model
+- **Token throughput** - input/output tokens per minute, broken down by model
+- **Error analysis** - errors by type (TooManyRequests, IOException, etc.), error rate by model with 5% threshold line
+- **Per-endpoint breakdown** - request rate and response time by service plan/endpoint
+- **Model-serving VM resources** - CPU, memory, system load, persistent/ephemeral disk usage for the `genai-models` BOSH deployment VMs
+- **VM status table** - at-a-glance table of all GenAI VMs with health, CPU, memory, load, disk, and swap
+
+#### Metrics used
+
+| Metric | Description |
+|--------|-------------|
+| `ai_server_requests_seconds_count/sum` | Request count and total duration (has `error` label) |
+| `ai_server_requests_active_seconds_max` | Max active request duration |
+| `gen_ai_server_time_to_first_token_seconds_count/sum` | Time to first token (TTFT) |
+| `gen_ai_client_operation_seconds_count/sum` | Client-side operation duration |
+| `ai_server_client_token_usage_total` | Token consumption (input/output) |
+| `system_cpu_user`, `system_cpu_sys` | BOSH VM CPU utilization |
+| `system_mem_percent`, `system_mem_kb` | BOSH VM memory utilization |
+| `system_load_1m` | BOSH VM system load average |
+| `system_disk_persistent_percent` | BOSH VM persistent disk (model storage) |
+| `system_disk_ephemeral_percent` | BOSH VM ephemeral disk |
+| `system_healthy` | BOSH VM health status |
