@@ -1013,7 +1013,7 @@
               }
             ]
           },
-          "unit": "deckbytes"
+          "unit": "kbytes"
         },
         "overrides": []
       },
@@ -1047,7 +1047,7 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"} * 1024",
+          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"}",
           "legendFormat": "{{exported_job}} ({{ip}})",
           "range": true,
           "refId": "A"
@@ -1610,7 +1610,7 @@
               },
               {
                 "id": "unit",
-                "value": "deckbytes"
+                "value": "kbytes"
               }
             ]
           },
@@ -1896,7 +1896,7 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"} * 1024",
+          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"}",
           "format": "table",
           "instant": true,
           "legendFormat": "",
