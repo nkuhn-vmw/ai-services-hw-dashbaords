@@ -266,26 +266,6 @@
     },
     {
       "datasource": { "type": "prometheus", "uid": null },
-      "description": "JVM heap memory by pool: Eden, Survivor, Old Gen.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 30, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "insertNulls": false, "lineInterpolation": "smooth", "lineWidth": 1, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "normal" }, "thresholdsStyle": { "mode": "off" } },
-          "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }, "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 31 },
-      "id": 22,
-      "options": { "legend": { "calcs": ["mean", "lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
-      "targets": [
-        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "jvm_memory_pool_bytes_used{source_id=\"ai-server\", area=\"heap\"}", "legendFormat": "{{id}}", "range": true, "refId": "A" }
-      ],
-      "title": "Heap Memory by Pool (stacked)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": null },
       "description": "GC pause duration and frequency.",
       "fieldConfig": {
         "defaults": {
@@ -295,7 +275,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 31 },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 31 },
       "id": 23,
       "options": { "legend": { "calcs": ["sum", "mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
@@ -343,28 +323,6 @@
     },
     {
       "datasource": { "type": "prometheus", "uid": null },
-      "description": "Average time to acquire and use a connection from HikariCP pool.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 15, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "insertNulls": false, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" }, "thresholdsStyle": { "mode": "off" } },
-          "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }, "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 40 },
-      "id": 31,
-      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
-      "targets": [
-        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "rate(hikaricp_connections_acquire_seconds_sum{source_id=\"ai-server\"}[5m]) / rate(hikaricp_connections_acquire_seconds_count{source_id=\"ai-server\"}[5m])", "legendFormat": "Avg Acquire Time", "range": true, "refId": "A" },
-        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "rate(hikaricp_connections_usage_seconds_sum{source_id=\"ai-server\"}[5m]) / rate(hikaricp_connections_usage_seconds_count{source_id=\"ai-server\"}[5m])", "legendFormat": "Avg Usage Time", "range": true, "refId": "B" },
-        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "rate(hikaricp_connections_creation_seconds_sum{source_id=\"ai-server\"}[5m]) / rate(hikaricp_connections_creation_seconds_count{source_id=\"ai-server\"}[5m])", "legendFormat": "Avg Creation Time", "range": true, "refId": "C" }
-      ],
-      "title": "Connection Acquire / Usage / Creation Time",
-      "type": "timeseries"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": null },
       "description": "Connection pool timeout rate. Spikes indicate the pool is exhausted.",
       "fieldConfig": {
         "defaults": {
@@ -376,7 +334,7 @@
           { "matcher": { "id": "byName", "options": "Timeouts" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] }
         ]
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 48 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 40 },
       "id": 32,
       "options": { "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
@@ -386,28 +344,8 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
-      "description": "Spring Data repository call rates and average durations.",
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "axisBorderShow": false, "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 15, "gradientMode": "none", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "insertNulls": false, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 5, "scaleDistribution": { "type": "linear" }, "showPoints": "never", "spanNulls": false, "stacking": { "group": "A", "mode": "none" }, "thresholdsStyle": { "mode": "off" } },
-          "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }, "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 48 },
-      "id": 33,
-      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
-      "targets": [
-        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "rate(spring_data_repository_invocations_seconds_sum{source_id=\"ai-server\"}[5m]) / rate(spring_data_repository_invocations_seconds_count{source_id=\"ai-server\"}[5m])", "legendFormat": "{{repository}}.{{method}}", "range": true, "refId": "A" }
-      ],
-      "title": "Spring Data Repository Avg Duration",
-      "type": "timeseries"
-    },
-    {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 56 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 48 },
       "id": 204,
       "panels": [],
       "title": "Threads & Logging",
@@ -426,7 +364,7 @@
           { "matcher": { "id": "byName", "options": "blocked" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] }
         ]
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 57 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 49 },
       "id": 40,
       "options": { "legend": { "calcs": ["mean", "lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
@@ -452,7 +390,7 @@
           { "matcher": { "id": "byName", "options": "trace" }, "properties": [{ "id": "color", "value": { "fixedColor": "purple", "mode": "fixed" } }] }
         ]
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 57 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 49 },
       "id": 41,
       "options": { "legend": { "calcs": ["sum", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
@@ -463,7 +401,7 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 65 },
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 57 },
       "id": 205,
       "panels": [],
       "title": "Controller VM Resources",
@@ -480,7 +418,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 66 },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 58 },
       "id": 50,
       "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
@@ -500,7 +438,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 66 },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 58 },
       "id": 51,
       "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
@@ -520,7 +458,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 66 },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 58 },
       "id": 52,
       "options": { "legend": { "calcs": ["mean", "last"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi", "sort": "desc" } },
       "targets": [
