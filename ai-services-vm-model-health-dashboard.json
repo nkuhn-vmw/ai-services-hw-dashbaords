@@ -741,8 +741,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_cpu_user{deployment=\"genai-models\", exported_job=~\"$Model\"} + system_cpu_sys{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_cpu_user{deployment=\"genai-models\", exported_job=~\"$Model\"} + system_cpu_sys{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -837,8 +837,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_load_1m{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_load_1m{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -951,8 +951,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_mem_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_mem_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -1047,8 +1047,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_mem_kb{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -1164,8 +1164,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_disk_persistent_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_disk_persistent_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -1268,8 +1268,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_disk_ephemeral_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_disk_ephemeral_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -1372,8 +1372,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_disk_system_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_disk_system_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -1490,8 +1490,8 @@
             "uid": null
           },
           "editorMode": "code",
-          "expr": "system_swap_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}",
-          "legendFormat": "{{exported_job}} ({{ip}})",
+          "expr": "label_replace(label_replace(label_replace(label_replace(system_swap_percent{deployment=\"genai-models\", exported_job=~\"$Model\"}, \"model_name\", \"openai/gpt-oss-120b\", \"exported_job\", \"9a00dcce-ab11-4627-a479-680df518c3b9\"), \"model_name\", \"Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8\", \"exported_job\", \"e168b0e3-e919-4885-94f2-0c7308eb652e\"), \"model_name\", \"nomic-ai/nomic-embed-text-v2-moe\", \"exported_job\", \"367585c2-304b-4084-9808-8df993686d7e\"), \"model_name\", \"Qwen/Qwen3.5-122B-A10B-GPTQ-Int4\", \"exported_job\", \"b9e68926-a1db-4448-835f-8ea229900c2d\")",
+          "legendFormat": "{{model_name}} ({{ip}})",
           "range": true,
           "refId": "A"
         }
@@ -1682,7 +1682,33 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "VM Job"
+                "value": "VM / Model"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "9a00dcce-ab11-4627-a479-680df518c3b9": {
+                        "text": "openai/gpt-oss-120b (vllm)",
+                        "color": "text"
+                      },
+                      "e168b0e3-e919-4885-94f2-0c7308eb652e": {
+                        "text": "Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8 (vllm)",
+                        "color": "text"
+                      },
+                      "367585c2-304b-4084-9808-8df993686d7e": {
+                        "text": "nomic-ai/nomic-embed-text-v2-moe (vllm)",
+                        "color": "text"
+                      },
+                      "b9e68926-a1db-4448-835f-8ea229900c2d": {
+                        "text": "Qwen/Qwen3.5-122B-A10B-GPTQ-Int4 (vllm)",
+                        "color": "text"
+                      }
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -1978,7 +2004,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "description": "Select a model to filter VMs. Run scripts/configure-vm-model-mapping.sh to populate with your foundation's models.",
+        "description": "Select a model to see only the VMs serving it.",
         "hide": 0,
         "includeAll": true,
         "allValue": ".*",
@@ -1990,9 +2016,29 @@
             "selected": true,
             "text": "All",
             "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "openai/gpt-oss-120b (vllm - 4x-3090)",
+            "value": "9a00dcce-ab11-4627-a479-680df518c3b9"
+          },
+          {
+            "selected": false,
+            "text": "Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8 (vllm - 4x-3090)",
+            "value": "e168b0e3-e919-4885-94f2-0c7308eb652e"
+          },
+          {
+            "selected": false,
+            "text": "nomic-ai/nomic-embed-text-v2-moe (vllm - grid_t4-8c)",
+            "value": "367585c2-304b-4084-9808-8df993686d7e"
+          },
+          {
+            "selected": false,
+            "text": "Qwen/Qwen3.5-122B-A10B-GPTQ-Int4 (vllm - 4x-3090)",
+            "value": "b9e68926-a1db-4448-835f-8ea229900c2d"
           }
         ],
-        "query": "",
+        "query": "openai/gpt-oss-120b (vllm - 4x-3090) : 9a00dcce-ab11-4627-a479-680df518c3b9, Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8 (vllm - 4x-3090) : e168b0e3-e919-4885-94f2-0c7308eb652e, nomic-ai/nomic-embed-text-v2-moe (vllm - grid_t4-8c) : 367585c2-304b-4084-9808-8df993686d7e, Qwen/Qwen3.5-122B-A10B-GPTQ-Int4 (vllm - 4x-3090) : b9e68926-a1db-4448-835f-8ea229900c2d",
         "type": "custom"
       }
     ]

@@ -192,3 +192,49 @@ git checkout -- ai-services-vm-model-health-dashboard.json ai-services-llm-perfo
 | `system_disk_system_percent` | BOSH VM system disk |
 | `system_swap_percent` | BOSH VM swap usage |
 | `system_healthy` | BOSH VM health status |
+
+---
+
+### AI Services - Postgres Health
+
+**File:** `ai-services-postgres-health-dashboard.json`
+
+Health monitoring for the 6 on-demand Postgres service instances backing AI Services. Covers both Postgres-level metrics (from `postgres_exporter`) and BOSH VM resources.
+
+#### Features
+
+- **Instance dropdown** - filter by deployment name (Postgres service instance) with All option
+- **Instance Overview** - instances up, total DB size, total backends, cache hit ratio, transaction rate, deadlocks
+- **Connections** - connections by state (stacked), connections vs max_connections (with red dashed limit line)
+- **Transaction Performance** - commit vs rollback rate (green/red), cache hit ratio over time with 95% threshold
+- **Tuple Operations** - fetched/inserted/updated/deleted rates, temp files & bytes
+- **Locks & Long Transactions** - locks by mode (stacked bars), max transaction duration by state
+- **WAL & Checkpoints** - WAL size over time, checkpoint rate (timed/requested) with bgwriter buffer stats
+- **VM Resources** - CPU, memory, and disk utilization per Postgres VM
+- **Table Statistics** (collapsed) - top tables by size (bar gauge), dead tuples needing vacuum
+- Links to **AI Server Health**, **LLM Performance**, **VM Model Health**, and **Token Billback** dashboards
+
+#### Metrics used
+
+| Metric | Description |
+|--------|-------------|
+| `pg_up` | Postgres exporter health (1 = up) |
+| `pg_database_size_bytes` | Database size on disk |
+| `pg_stat_database_numbackends` | Active backend connections |
+| `pg_stat_database_blks_hit/read` | Buffer cache hits and disk reads |
+| `pg_stat_database_xact_commit/rollback` | Transaction commit and rollback counts |
+| `pg_stat_database_deadlocks` | Deadlock count |
+| `pg_stat_database_tup_fetched/inserted/updated/deleted` | Tuple operation counts |
+| `pg_stat_database_temp_files/bytes` | Temporary file usage |
+| `pg_stat_activity_count` | Connections by state |
+| `pg_stat_activity_max_tx_duration_seconds` | Longest running transaction |
+| `pg_settings_max_connections` | Configured connection limit |
+| `pg_locks_count` | Lock counts by mode |
+| `pg_wal_size_bytes` | Write-Ahead Log size |
+| `pg_stat_bgwriter_checkpoints_timed/req_total` | Checkpoint frequency |
+| `pg_stat_bgwriter_buffers_checkpoint/clean_total` | Bgwriter buffer writes |
+| `pg_stat_user_tables_size_bytes` | Table sizes |
+| `pg_stat_user_tables_n_dead_tup` | Dead tuples per table |
+| `system_cpu_user`, `system_cpu_sys` | VM CPU utilization |
+| `system_mem_percent` | VM memory utilization |
+| `system_disk_persistent/ephemeral_percent` | VM disk utilization |

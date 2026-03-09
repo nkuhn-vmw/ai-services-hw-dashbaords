@@ -19,7 +19,8 @@
   "links": [
     { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "LLM Performance", "type": "link", "url": "/d/hw2-ai-llm-perf/ai-services-llm-performance" },
     { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "VM Model Health", "type": "link", "url": "/d/hw2-ai-vm-health/ai-services-vm-model-health" },
-    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "Token Billback", "type": "link", "url": "/d/hw2-ai-billback/ai-services-token-usage-billback" }
+    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "Token Billback", "type": "link", "url": "/d/hw2-ai-billback/ai-services-token-usage-billback" },
+    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "Postgres Health", "type": "link", "url": "/d/hw2-ai-postgres-health/ai-services-postgres-health" }
   ],
   "panels": [
     {

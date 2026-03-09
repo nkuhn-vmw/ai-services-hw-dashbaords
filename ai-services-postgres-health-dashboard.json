@@ -1,0 +1,965 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Postgres service instance health for AI Services: connections, transactions, cache, locks, WAL, checkpoints, table stats, and VM resources.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 2,
+  "links": [
+    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "AI Server Health", "type": "link", "url": "/d/hw2-ai-server-health/ai-services-ai-server-health" },
+    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "LLM Performance", "type": "link", "url": "/d/hw2-ai-llm-perf/ai-services-llm-performance" },
+    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "VM Model Health", "type": "link", "url": "/d/hw2-ai-vm-health/ai-services-vm-model-health" },
+    { "asDropdown": false, "icon": "dashboard", "includeVars": false, "keepTime": true, "tags": [], "targetBlank": false, "title": "Token Billback", "type": "link", "url": "/d/hw2-ai-billback/ai-services-token-usage-billback" }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 200,
+      "panels": [],
+      "title": "Instance Overview",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "id": 1,
+      "options": { "colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "value", "wideLayout": true },
+      "pluginVersion": "11.1.1",
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "count(pg_up{exported_job=\"postgres-instance\", deployment=~\"$instance\"} == 1)", "legendFormat": "Instances Up", "instant": true, "range": false, "refId": "A" }],
+      "title": "Instances Up",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "id": 2,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
+      "pluginVersion": "11.1.1",
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(pg_database_size_bytes{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "Total DB Size", "instant": true, "range": false, "refId": "A" }],
+      "title": "Total DB Size",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 80 }, { "color": "red", "value": 150 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+      "id": 3,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
+      "pluginVersion": "11.1.1",
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(pg_stat_database_numbackends{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "Backends", "instant": true, "range": false, "refId": "A" }],
+      "title": "Total Backends",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.9 }, { "color": "green", "value": 0.95 }] },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "id": 4,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
+      "pluginVersion": "11.1.1",
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_blks_hit{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])) / (sum(rate(pg_stat_database_blks_hit{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])) + sum(rate(pg_stat_database_blks_read{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])))", "legendFormat": "Cache Hit Ratio", "instant": true, "range": false, "refId": "A" }],
+      "title": "Cache Hit Ratio",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "id": 5,
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
+      "pluginVersion": "11.1.1",
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_xact_commit{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])) + sum(rate(pg_stat_database_xact_rollback{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Tx Rate", "instant": true, "range": false, "refId": "A" }],
+      "title": "Transaction Rate",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1 }, { "color": "red", "value": 5 }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "id": 6,
+      "options": { "colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showPercentChange": false, "textMode": "auto", "wideLayout": true },
+      "pluginVersion": "11.1.1",
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(increase(pg_stat_database_deadlocks{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[$__range]))", "legendFormat": "Deadlocks", "instant": true, "range": false, "refId": "A" }],
+      "title": "Deadlocks",
+      "type": "stat"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 201,
+      "panels": [],
+      "title": "Connections",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Active connections grouped by state (active, idle, idle in transaction, etc.).",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "connections",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "normal" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "id": 10,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum by (state) (pg_stat_activity_count{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{state}}", "range": true, "refId": "A" }],
+      "title": "Connections by State",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Current backend connections vs configured max_connections. The red dashed line shows the limit.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "connections",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "max_connections" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } },
+              { "id": "custom.lineStyle", "value": { "dash": [10, 10], "fill": "dash" } },
+              { "id": "custom.fillOpacity", "value": 0 }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "id": 11,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum by (deployment) (pg_stat_database_numbackends{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{deployment}}", "range": true, "refId": "A" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "min(pg_settings_max_connections{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "max_connections", "range": true, "refId": "B" }
+      ],
+      "title": "Connections vs Max",
+      "type": "timeseries"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "id": 202,
+      "panels": [],
+      "title": "Transaction Performance",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Rate of committed vs rolled-back transactions.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "tx/s",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "ops"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Commits" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Rollbacks" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 15 },
+      "id": 20,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_xact_commit{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Commits", "range": true, "refId": "A" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_xact_rollback{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Rollbacks", "range": true, "refId": "B" }
+      ],
+      "title": "Transaction Rate (Commit vs Rollback)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Buffer cache hit ratio over time. Values above 95% (green line) indicate healthy caching.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 0.95 }] },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 15 },
+      "id": 21,
+      "options": {
+        "legend": { "calcs": ["mean", "min"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_blks_hit{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])) / (sum(rate(pg_stat_database_blks_hit{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])) + sum(rate(pg_stat_database_blks_read{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m])))", "legendFormat": "Cache Hit Ratio", "range": true, "refId": "A" }],
+      "title": "Cache Hit Ratio",
+      "type": "timeseries"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 },
+      "id": 203,
+      "panels": [],
+      "title": "Tuple Operations",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Rate of tuple operations: fetched, inserted, updated, and deleted.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "tuples/s",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "id": 30,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_tup_fetched{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Fetched", "range": true, "refId": "A" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_tup_inserted{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Inserted", "range": true, "refId": "B" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_tup_updated{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Updated", "range": true, "refId": "C" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_tup_deleted{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Deleted", "range": true, "refId": "D" }
+      ],
+      "title": "Tuple Operations/s",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Rate of temporary file creation and bytes written. High values may indicate insufficient work_mem.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Temp Bytes" },
+            "properties": [
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "Bps" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Temp Files" },
+            "properties": [
+              { "id": "unit", "value": "ops" }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "id": 31,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_temp_files{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Temp Files", "range": true, "refId": "A" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_database_temp_bytes{datname=\"postgres\", exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Temp Bytes", "range": true, "refId": "B" }
+      ],
+      "title": "Temp Files & Bytes",
+      "type": "timeseries"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 32 },
+      "id": 204,
+      "panels": [],
+      "title": "Locks & Long Transactions",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Locks held by mode (AccessShareLock, RowExclusiveLock, etc.), stacked.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "locks",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "normal" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 33 },
+      "id": 40,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum by (mode) (pg_locks_count{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{mode}}", "range": true, "refId": "A" }],
+      "title": "Locks by Mode",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Maximum transaction duration by backend state. Long-running transactions can cause table bloat and lock contention.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 33 },
+      "id": 41,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "max by (state) (pg_stat_activity_max_tx_duration_seconds{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{state}}", "range": true, "refId": "A" }],
+      "title": "Max Transaction Duration",
+      "type": "timeseries"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 41 },
+      "id": 205,
+      "panels": [],
+      "title": "WAL & Checkpoints",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Write-Ahead Log size over time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 42 },
+      "id": 50,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum by (deployment) (pg_wal_size_bytes{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{deployment}}", "range": true, "refId": "A" }],
+      "title": "WAL Size",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Rate of timed and requested checkpoints, plus bgwriter buffer activity.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "events/s",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "ops"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Buffers Written (checkpoint)" },
+            "properties": [
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "short" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Buffers Written (bgwriter)" },
+            "properties": [
+              { "id": "custom.axisPlacement", "value": "right" },
+              { "id": "unit", "value": "short" }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 42 },
+      "id": 51,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_bgwriter_checkpoints_timed_total{exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Checkpoints (timed)", "range": true, "refId": "A" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_bgwriter_checkpoints_req_total{exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Checkpoints (requested)", "range": true, "refId": "B" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_bgwriter_buffers_checkpoint_total{exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Buffers Written (checkpoint)", "range": true, "refId": "C" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "sum(rate(pg_stat_bgwriter_buffers_clean_total{exported_job=\"postgres-instance\", deployment=~\"$instance\"}[5m]))", "legendFormat": "Buffers Written (bgwriter)", "range": true, "refId": "D" }
+      ],
+      "title": "Checkpoint Rate & Bgwriter",
+      "type": "timeseries"
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 50 },
+      "id": 206,
+      "panels": [],
+      "title": "VM Resources",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "CPU utilization (user + system) for Postgres VM instances.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 51 },
+      "id": 60,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "system_cpu_user{exported_job=\"postgres-instance\", deployment=~\"$instance\"} + system_cpu_sys{exported_job=\"postgres-instance\", deployment=~\"$instance\"}", "legendFormat": "{{deployment}}", "range": true, "refId": "A" }],
+      "title": "CPU %",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Memory utilization for Postgres VM instances.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 51 },
+      "id": 61,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "system_mem_percent{exported_job=\"postgres-instance\", deployment=~\"$instance\"}", "legendFormat": "{{deployment}}", "range": true, "refId": "A" }],
+      "title": "Memory %",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Persistent and ephemeral disk utilization for Postgres VM instances.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 80 }] },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byRegexp", "options": ".*persistent.*" },
+            "properties": [{ "id": "custom.lineStyle", "value": { "fill": "solid" } }]
+          },
+          {
+            "matcher": { "id": "byRegexp", "options": ".*ephemeral.*" },
+            "properties": [{ "id": "custom.lineStyle", "value": { "dash": [10, 10], "fill": "dash" } }]
+          }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 51 },
+      "id": 62,
+      "options": {
+        "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "system_disk_persistent_percent{exported_job=\"postgres-instance\", deployment=~\"$instance\"}", "legendFormat": "{{deployment}} persistent", "range": true, "refId": "A" },
+        { "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "system_disk_ephemeral_percent{exported_job=\"postgres-instance\", deployment=~\"$instance\"}", "legendFormat": "{{deployment}} ephemeral", "range": true, "refId": "B" }
+      ],
+      "title": "Disk %",
+      "type": "timeseries"
+    },
+
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 59 },
+      "id": 207,
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "description": "Largest tables by on-disk size.",
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "mappings": [],
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 60 },
+          "id": 70,
+          "options": {
+            "displayMode": "gradient",
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "11.1.1",
+          "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "topk(15, pg_stat_user_tables_size_bytes{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{relname}} ({{deployment}})", "instant": true, "range": false, "refId": "A" }],
+          "title": "Top Tables by Size",
+          "type": "bargauge"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "description": "Tables with the most dead tuples, indicating a need for vacuum. High dead tuple counts cause table bloat.",
+          "fieldConfig": {
+            "defaults": {
+              "color": { "mode": "palette-classic" },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "dead tuples",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "bars",
+                "fillOpacity": 80,
+                "gradientMode": "none",
+                "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                "insertNulls": false,
+                "lineInterpolation": "smooth",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": { "type": "linear" },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": { "group": "A", "mode": "none" },
+                "thresholdsStyle": { "mode": "off" }
+              },
+              "mappings": [],
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 1000 }, { "color": "red", "value": 10000 }] }
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 60 },
+          "id": 71,
+          "options": {
+            "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+            "tooltip": { "mode": "multi", "sort": "desc" }
+          },
+          "targets": [{ "datasource": { "type": "prometheus", "uid": null }, "editorMode": "code", "expr": "topk(15, pg_stat_user_tables_n_dead_tup{exported_job=\"postgres-instance\", deployment=~\"$instance\"})", "legendFormat": "{{relname}} ({{deployment}})", "range": true, "refId": "A" }],
+          "title": "Dead Tuples (Vacuum Needed)",
+          "type": "timeseries"
+        }
+      ],
+      "title": "Table Statistics",
+      "type": "row"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["Healthwatch", "AI Services", "Postgres"],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": { "type": "prometheus", "uid": null },
+        "definition": "label_values(pg_up{exported_job=\"postgres-instance\"}, deployment)",
+        "description": "Select a Postgres service instance (deployment) to filter all panels.",
+        "hide": 0,
+        "includeAll": true,
+        "allValue": ".*",
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(pg_up{exported_job=\"postgres-instance\"}, deployment)",
+          "refId": "PrometheusVariableQueryEditor-instance"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "AI Services - Postgres Health",
+  "uid": "hw2-ai-postgres-health",
+  "version": 1,
+  "weekStart": ""
+}

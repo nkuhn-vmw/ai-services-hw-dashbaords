@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -19,36 +22,60 @@
   "panels": [
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
       "id": 100,
       "panels": [],
       "title": "Token Usage Summary",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "blue", "value": null }
+              {
+                "color": "blue",
+                "value": null
+              }
             ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 1 },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
       "id": 1,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
@@ -56,9 +83,12 @@
       "pluginVersion": "11.1.1",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
           "legendFormat": "Input Tokens",
           "range": true,
           "refId": "A"
@@ -68,29 +98,48 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null }
+              {
+                "color": "green",
+                "value": null
+              }
             ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 1 },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
       "id": 2,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
@@ -98,9 +147,12 @@
       "pluginVersion": "11.1.1",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
           "legendFormat": "Output Tokens",
           "range": true,
           "refId": "A"
@@ -110,29 +162,48 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "purple", "value": null }
+              {
+                "color": "purple",
+                "value": null
+              }
             ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 5, "w": 6, "x": 12, "y": 1 },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
       "id": 3,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
@@ -140,9 +211,12 @@
       "pluginVersion": "11.1.1",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
           "legendFormat": "Total Tokens",
           "range": true,
           "refId": "A"
@@ -152,29 +226,48 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "orange", "value": null }
+              {
+                "color": "orange",
+                "value": null
+              }
             ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 5, "w": 6, "x": 18, "y": 1 },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
       "id": 4,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
@@ -182,9 +275,12 @@
       "pluginVersion": "11.1.1",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum(increase(ai_server_requests_seconds_count{platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range])) or sum(increase(ai_server_requests_active_seconds_count{platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+          "expr": "sum(increase(ai_server_requests_seconds_count{platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range])) or sum(increase(ai_server_requests_active_seconds_count{platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
           "legendFormat": "Requests",
           "range": true,
           "refId": "A"
@@ -195,18 +291,28 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 6 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
       "id": 101,
       "panels": [],
       "title": "Billback by Organization",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Total token usage per CF organization. Uses a join with container metrics to resolve org names from space GUIDs.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -215,39 +321,70 @@
             "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "lineWidth": 1,
-            "scaleDistribution": { "type": "linear" },
-            "thresholdsStyle": { "mode": "off" }
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 7 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
       "id": 10,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.6,
         "fullHighlight": false,
         "groupWidth": 0.7,
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "orientation": "horizontal",
         "showValue": "auto",
         "stacking": "normal",
-        "tooltip": { "mode": "multi", "sort": "desc" },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
         "xTickLabelRotation": 0
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\")) or sum by(organization_name, gen_ai_token_type) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"))",
           "legendFormat": "{{organization_name}} - {{gen_ai_token_type}}",
           "instant": true,
           "range": false,
@@ -258,11 +395,16 @@
       "type": "barchart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Token usage over time grouped by CF organization.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -273,37 +415,71 @@
             "drawStyle": "bars",
             "fillOpacity": 50,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "normal" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 7 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
       "id": 11,
       "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[1h]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[1h]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\")) or sum by(organization_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[1h]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"))",
           "legendFormat": "{{organization_name}}",
           "range": true,
           "refId": "A"
@@ -314,18 +490,28 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 15 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
       "id": 102,
       "panels": [],
       "title": "Billback by Space",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Total token usage per CF space. Uses a join to resolve space names.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -334,39 +520,70 @@
             "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "lineWidth": 1,
-            "scaleDistribution": { "type": "linear" },
-            "thresholdsStyle": { "mode": "off" }
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
       "id": 20,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.6,
         "fullHighlight": false,
         "groupWidth": 0.7,
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "orientation": "horizontal",
         "showValue": "auto",
         "stacking": "normal",
-        "tooltip": { "mode": "multi", "sort": "desc" },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
         "xTickLabelRotation": 0
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name, space_name, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name, space_name, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\")) or sum by(organization_name, space_name, gen_ai_token_type) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"))",
           "legendFormat": "{{organization_name}}/{{space_name}} - {{gen_ai_token_type}}",
           "instant": true,
           "range": false,
@@ -377,11 +594,16 @@
       "type": "barchart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Token usage over time grouped by CF space.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -392,37 +614,71 @@
             "drawStyle": "bars",
             "fillOpacity": 50,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "normal" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
       "id": 21,
       "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name, space_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[1h]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name, space_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[1h]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\")) or sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[1h]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"))",
           "legendFormat": "{{organization_name}}/{{space_name}}",
           "range": true,
           "refId": "A"
@@ -433,18 +689,28 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 24 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
       "id": 103,
       "panels": [],
       "title": "Billback by LLM Model",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Token usage broken down by LLM model.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -453,39 +719,70 @@
             "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "lineWidth": 1,
-            "scaleDistribution": { "type": "linear" },
-            "thresholdsStyle": { "mode": "off" }
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 25 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
       "id": 30,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.6,
         "fullHighlight": false,
         "groupWidth": 0.7,
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "orientation": "horizontal",
         "showValue": "auto",
         "stacking": "normal",
-        "tooltip": { "mode": "multi", "sort": "desc" },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
         "xTickLabelRotation": 0
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+          "expr": "sum by(ai_server_advertised_model, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
           "legendFormat": "{{ai_server_advertised_model}} - {{gen_ai_token_type}}",
           "instant": true,
           "range": false,
@@ -496,11 +793,16 @@
       "type": "barchart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Token usage over time by LLM model.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -511,37 +813,71 @@
             "drawStyle": "bars",
             "fillOpacity": 50,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "normal" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 25 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
       "id": 31,
       "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(ai_server_advertised_model) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[1h]))",
+          "expr": "sum by(ai_server_advertised_model) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[1h]))",
           "legendFormat": "{{ai_server_advertised_model}}",
           "range": true,
           "refId": "A"
@@ -552,18 +888,28 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 33 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
       "id": 104,
       "panels": [],
       "title": "Billback by Service Plan / Endpoint",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Token usage by AI service endpoint (plan). Each endpoint represents a service plan configuration.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -572,39 +918,70 @@
             "axisPlacement": "auto",
             "fillOpacity": 80,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "lineWidth": 1,
-            "scaleDistribution": { "type": "linear" },
-            "thresholdsStyle": { "mode": "off" }
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 34 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
       "id": 40,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.6,
         "fullHighlight": false,
         "groupWidth": 0.7,
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
         "orientation": "horizontal",
         "showValue": "auto",
         "stacking": "normal",
-        "tooltip": { "mode": "multi", "sort": "desc" },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
         "xTickLabelRotation": 0
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(ai_server_endpoint, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+          "expr": "sum by(ai_server_endpoint, gen_ai_token_type) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
           "legendFormat": "{{ai_server_endpoint}} - {{gen_ai_token_type}}",
           "instant": true,
           "range": false,
@@ -615,11 +992,16 @@
       "type": "barchart"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
       "description": "Token usage over time by service endpoint.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -630,37 +1012,71 @@
             "drawStyle": "bars",
             "fillOpacity": 50,
             "gradientMode": "none",
-            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": { "type": "linear" },
+            "scaleDistribution": {
+              "type": "linear"
+            },
             "showPoints": "never",
             "spanNulls": false,
-            "stacking": { "group": "A", "mode": "normal" },
-            "thresholdsStyle": { "mode": "off" }
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 34 },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
       "id": 41,
       "options": {
-        "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(ai_server_endpoint) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[1h]))",
+          "expr": "sum by(ai_server_endpoint) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[1h]))",
           "legendFormat": "{{ai_server_endpoint}}",
           "range": true,
           "refId": "A"
@@ -671,118 +1087,702 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 42 },
-      "id": 105,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 107,
       "panels": [],
-      "title": "Detailed Billback Table",
+      "title": "Billback by Service Instance",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": null },
-      "description": "Detailed token usage breakdown by organization, space, model, and endpoint for billing purposes. Shows data for spaces with running apps (org/space name resolution via container metrics).",
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Token usage broken down by service instance GUID. Captures all consumption including service key usage.",
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Tokens",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 43
+      },
+      "id": 70,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.6,
+        "fullHighlight": false,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "normal",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "xTickLabelRotation": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(service_instance_name, platform_cf_service_instance_guid, gen_ai_token_type) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\", platform_cf_service_instance_guid!=\"\"}[$__range]), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
+          "legendFormat": "{{service_instance_name}} ({{platform_cf_service_instance_guid}}) - {{gen_ai_token_type}}",
+          "instant": true,
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Token Usage by Service Instance",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Token usage over time by service instance GUID.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Tokens",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 50,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 43
+      },
+      "id": 71,
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(service_instance_name, platform_cf_service_instance_guid) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\", platform_cf_service_instance_guid!=\"\"}[1h]), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
+          "legendFormat": "{{service_instance_name}} ({{platform_cf_service_instance_guid}})",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Token Usage Over Time by Service Instance (per hour)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 108,
+      "panels": [],
+      "title": "Billback Table - Per Org",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Token usage rolled up by organization and space for billing purposes.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "custom": {
             "align": "auto",
-            "cellOptions": { "type": "auto" },
+            "cellOptions": {
+              "type": "auto"
+            },
             "inspect": false
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           }
         },
         "overrides": [
           {
-            "matcher": { "id": "byName", "options": "Value #Input" },
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Input"
+            },
             "properties": [
-              { "id": "displayName", "value": "Input Tokens" },
-              { "id": "unit", "value": "short" },
-              { "id": "custom.align", "value": "right" }
+              {
+                "id": "displayName",
+                "value": "Input Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Value #Output" },
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Output"
+            },
             "properties": [
-              { "id": "displayName", "value": "Output Tokens" },
-              { "id": "unit", "value": "short" },
-              { "id": "custom.align", "value": "right" }
+              {
+                "id": "displayName",
+                "value": "Output Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "Value #Total" },
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Total"
+            },
             "properties": [
-              { "id": "displayName", "value": "Total Tokens" },
-              { "id": "unit", "value": "short" },
-              { "id": "custom.align", "value": "right" },
-              { "id": "custom.cellOptions", "value": { "mode": "gradient", "type": "gauge" } }
+              {
+                "id": "displayName",
+                "value": "Total Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              }
             ]
           },
           {
-            "matcher": { "id": "byName", "options": "organization_name" },
-            "properties": [{ "id": "displayName", "value": "Organization" }]
+            "matcher": {
+              "id": "byName",
+              "options": "organization_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Organization"
+              }
+            ]
           },
           {
-            "matcher": { "id": "byName", "options": "space_name" },
-            "properties": [{ "id": "displayName", "value": "Space" }]
+            "matcher": {
+              "id": "byName",
+              "options": "space_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Space"
+              }
+            ]
           },
           {
-            "matcher": { "id": "byName", "options": "ai_server_advertised_model" },
-            "properties": [{ "id": "displayName", "value": "LLM Model" }]
-          },
-          {
-            "matcher": { "id": "byName", "options": "ai_server_endpoint" },
-            "properties": [{ "id": "displayName", "value": "Endpoint / Plan" }]
-          },
-          {
-            "matcher": { "id": "byName", "options": "Time" },
-            "properties": [{ "id": "custom.hidden", "value": true }]
-          },
-          {
-            "matcher": { "id": "byName", "options": "platform_cf_space_guid" },
-            "properties": [{ "id": "custom.hidden", "value": true }]
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
           }
         ]
       },
-      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 43 },
-      "id": 50,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "id": 55,
       "options": {
         "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "enablePagination": true,
-          "fields": ["Value #Input", "Value #Output", "Value #Total"],
-          "reducer": ["sum"],
+          "fields": [
+            "Value #Input",
+            "Value #Output",
+            "Value #Total"
+          ],
+          "reducer": [
+            "sum"
+          ],
           "show": true
         },
         "showHeader": true,
-        "sortBy": [{ "desc": true, "displayName": "Total Tokens" }]
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total Tokens"
+          }
+        ]
       },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\")) or sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
           "format": "table",
           "instant": true,
           "legendFormat": "",
           "refId": "Input"
         },
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\")) or sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
           "format": "table",
           "instant": true,
           "legendFormat": "",
           "refId": "Output"
         },
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "editorMode": "code",
-          "expr": "sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"))",
+          "expr": "sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\")) or sum by(organization_name, space_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Total"
+        }
+      ],
+      "title": "Billback Summary by Organization / Space",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 62
+      },
+      "id": 105,
+      "panels": [],
+      "title": "Detailed Billback Table",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Detailed token usage breakdown by organization, space, model, and endpoint for billing purposes. Shows data for spaces with running apps (org/space name resolution via container metrics).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Input"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Input Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Output"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Output Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Total"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "organization_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Organization"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "space_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Space"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ai_server_advertised_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "LLM Model"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ai_server_endpoint"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Endpoint / Plan"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "service_instance_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Service Instance Name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_service_instance_guid"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Service Instance GUID"
+              },
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_space_guid"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 63
+      },
+      "id": 50,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": [
+            "Value #Input",
+            "Value #Output",
+            "Value #Total"
+          ],
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total Tokens"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, service_instance_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\")) or sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, service_instance_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Input"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, service_instance_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\")) or sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, service_instance_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Output"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, service_instance_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid!=\"\", platform_cf_space_guid=~\"$SpaceGUID\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]) * on(platform_cf_space_guid) group_left(organization_name, space_name) label_replace(max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}) / max by(space_id, organization_name, space_name) (cpu{space_id!=\"\"}), \"platform_cf_space_guid\", \"$1\", \"space_id\", \"(.*)\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\")) or sum by(organization_name, space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, service_instance_name) (label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(label_replace(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", platform_cf_space_guid=\"\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]), \"organization_name\", \"system\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"organization_name\", \"tech-marketing\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"organization_name\", \"tks-dev\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"organization_name\", \"claude-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"space_name\", \"openclaw-services\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"space_name\", \"nick\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"space_name\", \"cf-llama-chat-scratch\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"openclaw-genai\", \"platform_cf_service_instance_guid\", \"3e00f36c-ff44-4bec-ac77-5ef2b25d167c\"), \"service_instance_name\", \"all-models-opencode\", \"platform_cf_service_instance_guid\", \"bf32c817-c88d-4c40-ac3d-51923ad07e26\"), \"service_instance_name\", \"opencode-test\", \"platform_cf_service_instance_guid\", \"cd887f04-6f3a-41fe-8029-c61b9353c85f\"), \"service_instance_name\", \"tanzu-all-models\", \"platform_cf_service_instance_guid\", \"57a3dca0-73fc-45c5-843c-30938950be51\"), \"service_instance_name\", \"tanzu-gpt-oss-120b\", \"platform_cf_service_instance_guid\", \"42ba2e43-a90e-4332-9cdd-17f07275e776\"), \"service_instance_name\", \"tanzu-Qwen3-Coder-30B\", \"platform_cf_service_instance_guid\", \"bbfa15e3-c7c7-483f-9ecb-104de07e28c3\"), \"service_instance_name\", \"worldmind-model\", \"platform_cf_service_instance_guid\", \"c741a321-1231-482e-889f-dbe2ce9e6db4\"), \"service_instance_name\", \"worldmind-model-2\", \"platform_cf_service_instance_guid\", \"0a92a79f-86aa-497d-a169-f5e3133f8859\"))",
           "format": "table",
           "instant": true,
           "legendFormat": "",
@@ -800,93 +1800,195 @@
     },
     {
       "collapsed": true,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 53 },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 73
+      },
       "id": 106,
       "panels": [
         {
-          "datasource": { "type": "prometheus", "uid": null },
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
           "description": "Complete token usage data including spaces without running apps (shown by GUID). This ensures no billing data is missed even when consuming apps are stopped.",
           "fieldConfig": {
             "defaults": {
-              "color": { "mode": "thresholds" },
+              "color": {
+                "mode": "thresholds"
+              },
               "custom": {
                 "align": "auto",
-                "cellOptions": { "type": "auto" },
+                "cellOptions": {
+                  "type": "auto"
+                },
                 "inspect": false
               },
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
-                "steps": [{ "color": "green", "value": null }]
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
               }
             },
             "overrides": [
               {
-                "matcher": { "id": "byName", "options": "Value #Input" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #Input"
+                },
                 "properties": [
-                  { "id": "displayName", "value": "Input Tokens" },
-                  { "id": "unit", "value": "short" },
-                  { "id": "custom.align", "value": "right" }
+                  {
+                    "id": "displayName",
+                    "value": "Input Tokens"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  },
+                  {
+                    "id": "custom.align",
+                    "value": "right"
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "Value #Output" },
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value #Output"
+                },
                 "properties": [
-                  { "id": "displayName", "value": "Output Tokens" },
-                  { "id": "unit", "value": "short" },
-                  { "id": "custom.align", "value": "right" }
+                  {
+                    "id": "displayName",
+                    "value": "Output Tokens"
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  },
+                  {
+                    "id": "custom.align",
+                    "value": "right"
+                  }
                 ]
               },
               {
-                "matcher": { "id": "byName", "options": "platform_cf_space_guid" },
-                "properties": [{ "id": "displayName", "value": "Space GUID" }]
+                "matcher": {
+                  "id": "byName",
+                  "options": "platform_cf_space_guid"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Space GUID"
+                  }
+                ]
               },
               {
-                "matcher": { "id": "byName", "options": "ai_server_advertised_model" },
-                "properties": [{ "id": "displayName", "value": "LLM Model" }]
+                "matcher": {
+                  "id": "byName",
+                  "options": "ai_server_advertised_model"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "LLM Model"
+                  }
+                ]
               },
               {
-                "matcher": { "id": "byName", "options": "ai_server_endpoint" },
-                "properties": [{ "id": "displayName", "value": "Endpoint / Plan" }]
+                "matcher": {
+                  "id": "byName",
+                  "options": "ai_server_endpoint"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Endpoint / Plan"
+                  }
+                ]
               },
               {
-                "matcher": { "id": "byName", "options": "platform_cf_service_instance_guid" },
-                "properties": [{ "id": "displayName", "value": "Service Instance GUID" }]
+                "matcher": {
+                  "id": "byName",
+                  "options": "platform_cf_service_instance_guid"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Service Instance GUID"
+                  }
+                ]
               },
               {
-                "matcher": { "id": "byName", "options": "Time" },
-                "properties": [{ "id": "custom.hidden", "value": true }]
+                "matcher": {
+                  "id": "byName",
+                  "options": "Time"
+                },
+                "properties": [
+                  {
+                    "id": "custom.hidden",
+                    "value": true
+                  }
+                ]
               }
             ]
           },
-          "gridPos": { "h": 10, "w": 24, "x": 0, "y": 54 },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 74
+          },
           "id": 60,
           "options": {
             "cellHeight": "sm",
             "footer": {
               "countRows": false,
               "enablePagination": true,
-              "fields": ["Value #Input", "Value #Output"],
-              "reducer": ["sum"],
+              "fields": [
+                "Value #Input",
+                "Value #Output"
+              ],
+              "reducer": [
+                "sum"
+              ],
               "show": true
             },
             "showHeader": true,
-            "sortBy": [{ "desc": true, "displayName": "Input Tokens" }]
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Input Tokens"
+              }
+            ]
           },
           "targets": [
             {
-              "datasource": { "type": "prometheus", "uid": null },
+              "datasource": {
+                "type": "prometheus",
+                "uid": null
+              },
               "editorMode": "code",
-              "expr": "sum by(platform_cf_space_guid, ai_server_advertised_model, ai_server_endpoint, platform_cf_service_instance_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+              "expr": "sum by(platform_cf_space_guid, ai_server_advertised_model, ai_server_endpoint, platform_cf_service_instance_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
               "format": "table",
               "instant": true,
               "legendFormat": "",
               "refId": "Input"
             },
             {
-              "datasource": { "type": "prometheus", "uid": null },
+              "datasource": {
+                "type": "prometheus",
+                "uid": null
+              },
               "editorMode": "code",
-              "expr": "sum by(platform_cf_space_guid, ai_server_advertised_model, ai_server_endpoint, platform_cf_service_instance_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\"}[$__range]))",
+              "expr": "sum by(platform_cf_space_guid, ai_server_advertised_model, ai_server_endpoint, platform_cf_service_instance_guid) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_service_instance_guid=~\"$ServiceInstance\"}[$__range]))",
               "format": "table",
               "instant": true,
               "legendFormat": "",
@@ -909,11 +2011,18 @@
   ],
   "refresh": "30s",
   "schemaVersion": 39,
-  "tags": ["Healthwatch", "AI Services", "Billback"],
+  "tags": [
+    "Healthwatch",
+    "AI Services",
+    "Billback"
+  ],
   "templating": {
     "list": [
       {
-        "datasource": { "type": "prometheus", "uid": null },
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
         "definition": "label_values(cpu{organization_name!=\"\"}, organization_name)",
         "description": "Filter by Cloud Foundry organization.",
         "hide": 0,
@@ -934,7 +2043,10 @@
         "type": "query"
       },
       {
-        "datasource": { "type": "prometheus", "uid": null },
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
         "definition": "label_values(cpu{organization_name=~\"$Organization\", space_name!=\"\"}, space_name)",
         "description": "Filter by Cloud Foundry space.",
         "hide": 0,
@@ -955,9 +2067,13 @@
         "type": "query"
       },
       {
-        "datasource": { "type": "prometheus", "uid": null },
+        "allValue": ".*",
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
         "definition": "label_values(cpu{space_name=~\"$Space\"}, space_id)",
-        "description": "Resolved space GUIDs from selected space names. Used internally by panel queries.",
+        "description": "Resolved space GUIDs from selected space names. When 'All' is selected, includes all spaces (including those with only service key usage).",
         "hide": 2,
         "includeAll": true,
         "label": "Space GUID",
@@ -976,7 +2092,10 @@
         "type": "query"
       },
       {
-        "datasource": { "type": "prometheus", "uid": null },
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
         "definition": "label_values(ai_server_client_token_usage_total, ai_server_advertised_model)",
         "description": "Filter by LLM model name.",
         "hide": 0,
@@ -997,7 +2116,10 @@
         "type": "query"
       },
       {
-        "datasource": { "type": "prometheus", "uid": null },
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
         "definition": "label_values(ai_server_client_token_usage_total, ai_server_endpoint)",
         "description": "Filter by AI service endpoint (plan).",
         "hide": 0,
@@ -1016,10 +2138,38 @@
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
+        "definition": "label_values(ai_server_client_token_usage_total{platform_cf_service_instance_guid!=\"\"}, platform_cf_service_instance_guid)",
+        "description": "Filter by Cloud Foundry service instance GUID. Includes both app bindings and service keys.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Service Instance",
+        "multi": true,
+        "name": "ServiceInstance",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ai_server_client_token_usage_total{platform_cf_service_instance_guid!=\"\"}, platform_cf_service_instance_guid)",
+          "refId": "PrometheusVariableQueryEditor-ServiceInstance"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
       }
     ]
   },
-  "time": { "from": "now-24h", "to": "now" },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
   "timepicker": {},
   "timezone": "browser",
   "title": "AI Services - Token Usage Billback",
