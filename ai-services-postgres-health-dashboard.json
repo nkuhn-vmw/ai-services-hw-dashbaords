@@ -929,29 +929,25 @@
       {
         "current": {
           "selected": true,
-          "text": "All",
-          "value": "$__all"
+          "text": "service-instance_26f61ba6-a4e4-4ee7-b8b9-3462f01454d7",
+          "value": "service-instance_26f61ba6-a4e4-4ee7-b8b9-3462f01454d7"
         },
-        "datasource": { "type": "prometheus", "uid": null },
-        "definition": "label_values(pg_up{exported_job=\"postgres-instance\"}, deployment)",
-        "description": "Select a Postgres service instance (deployment) to filter all panels.",
-        "hide": 0,
-        "includeAll": true,
-        "allValue": ".*",
+        "description": "Postgres service instance backing the GenAI tile (genai-104e72cd9380b6ce67db-backing-db).",
+        "hide": 2,
+        "includeAll": false,
         "label": "Instance",
-        "multi": true,
+        "multi": false,
         "name": "instance",
-        "options": [],
-        "query": {
-          "qryType": 1,
-          "query": "label_values(pg_up{exported_job=\"postgres-instance\"}, deployment)",
-          "refId": "PrometheusVariableQueryEditor-instance"
-        },
-        "refresh": 2,
-        "regex": "",
+        "options": [
+          {
+            "selected": true,
+            "text": "service-instance_26f61ba6-a4e4-4ee7-b8b9-3462f01454d7",
+            "value": "service-instance_26f61ba6-a4e4-4ee7-b8b9-3462f01454d7"
+          }
+        ],
+        "query": "service-instance_26f61ba6-a4e4-4ee7-b8b9-3462f01454d7",
         "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
+        "type": "custom"
       }
     ]
   },

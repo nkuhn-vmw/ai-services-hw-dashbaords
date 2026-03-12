@@ -1,0 +1,523 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "green", "mode": "fixed" },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 5, "x": 0, "y": 0 },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\"}[1d]))",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Today (All Users)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "text", "mode": "fixed" },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "text", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 5, "x": 5, "y": 0 },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\"}[7d]))",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "This Week",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "text", "mode": "fixed" },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "text", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 5, "x": 10, "y": 0 },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\"}[30d]))",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "This Month",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "text", "mode": "fixed" },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "text", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 5, "x": 15, "y": 0 },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum(increase(ai_server_requests_seconds_count[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Requests",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "green", "mode": "fixed" },
+          "decimals": 1,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 4, "x": 20, "y": 0 },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum(increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\"}[$__range])) / sum(increase(ai_server_requests_seconds_sum[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Tokens/Sec",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "green", "mode": "fixed" },
+          "decimals": 0,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 5, "x": 0, "y": 5 },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "1000 * sum(increase(gen_ai_server_time_to_first_token_seconds_sum[$__range])) / sum(increase(gen_ai_server_time_to_first_token_seconds_count[$__range]))",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg TTFT (ms)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Total tokens (input + output) by model for the selected time range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "green", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 10 },
+      "id": 10,
+      "options": {
+        "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sort_desc(sum by (ai_server_advertised_model) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\"}[$__range])))",
+          "instant": true,
+          "legendFormat": "{{ai_server_advertised_model}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Tokens by Model",
+      "type": "bargauge"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "description": "Per-model breakdown: requests, total tokens, avg response time, avg tokens/sec, and avg time to first token.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "ai_server_advertised_model" },
+            "properties": [
+              { "id": "displayName", "value": "Model" },
+              { "id": "custom.width", "value": 380 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Value #Requests" },
+            "properties": [
+              { "id": "displayName", "value": "Requests" },
+              { "id": "unit", "value": "short" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.align", "value": "right" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Value #Tokens" },
+            "properties": [
+              { "id": "displayName", "value": "Total Tokens" },
+              { "id": "unit", "value": "short" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.align", "value": "right" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Value #AvgResp" },
+            "properties": [
+              { "id": "displayName", "value": "Avg Response (ms)" },
+              { "id": "unit", "value": "short" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.align", "value": "right" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Value #TPS" },
+            "properties": [
+              { "id": "displayName", "value": "Avg Tokens/Sec" },
+              { "id": "unit", "value": "short" },
+              { "id": "decimals", "value": 1 },
+              { "id": "custom.align", "value": "right" }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Value #TTFT" },
+            "properties": [
+              { "id": "displayName", "value": "Avg TTFT (ms)" },
+              { "id": "unit", "value": "short" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.align", "value": "right" }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 20 },
+      "id": 20,
+      "options": {
+        "cellHeight": "md",
+        "footer": { "countRows": false, "fields": "", "reducer": ["sum"], "show": false },
+        "showHeader": true,
+        "sortBy": [{ "desc": true, "displayName": "Total Tokens" }]
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum by (ai_server_advertised_model) (increase(ai_server_requests_seconds_count[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Requests"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum by (ai_server_advertised_model) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Tokens"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "1000 * sum by (ai_server_advertised_model) (increase(ai_server_requests_seconds_sum[$__range])) / sum by (ai_server_advertised_model) (increase(ai_server_requests_seconds_count[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "AvgResp"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sum by (ai_server_advertised_model) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\"}[$__range])) / sum by (ai_server_advertised_model) (increase(ai_server_requests_seconds_sum[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "TPS"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "1000 * sum by (ai_server_advertised_model) (increase(gen_ai_server_time_to_first_token_seconds_sum[$__range])) / sum by (ai_server_advertised_model) (increase(gen_ai_server_time_to_first_token_seconds_count[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "TTFT"
+        }
+      ],
+      "title": "Model Performance Summary",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": { "byField": "ai_server_advertised_model", "mode": "outer" }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true, "Time 1": true, "Time 2": true, "Time 3": true, "Time 4": true, "Time 5": true },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "yellow", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "yellow", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 30 },
+      "id": 30,
+      "options": {
+        "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "text": { "valueSize": 14 },
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sort_desc(\n  sum by (ai_server_advertised_model) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\"}[$__range]))\n  /\n  sum by (ai_server_advertised_model) (increase(ai_server_requests_seconds_sum[$__range]))\n)",
+          "instant": true,
+          "legendFormat": "{{ai_server_advertised_model}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Tokens/Second by Model",
+      "type": "bargauge"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": null },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "purple", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 30 },
+      "id": 31,
+      "options": {
+        "displayMode": "basic",
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "text": { "valueSize": 14 },
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.1.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": null },
+          "editorMode": "code",
+          "expr": "sort_desc(\n  1000 * sum by (ai_server_advertised_model) (increase(gen_ai_server_time_to_first_token_seconds_sum[$__range]))\n  /\n  sum by (ai_server_advertised_model) (increase(gen_ai_server_time_to_first_token_seconds_count[$__range]))\n)",
+          "instant": true,
+          "legendFormat": "{{ai_server_advertised_model}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg Time to First Token by Model (ms)",
+      "type": "bargauge"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["Healthwatch", "AI Services", "LLM", "Usage"],
+  "templating": { "list": [] },
+  "time": { "from": "now-30d", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "AI Services - LLM Usage Rollup",
+  "uid": "hw2-ai-llm-usage-rollup",
+  "version": 1,
+  "weekStart": ""
+}
