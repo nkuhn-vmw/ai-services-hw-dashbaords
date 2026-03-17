@@ -1,0 +1,686 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "panels": [],
+      "title": "Billback Table - Per Org",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Token usage rolled up by organization and space for billing purposes.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Input"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Input Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Output"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Output Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Total"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_org_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Organization"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_space_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Space"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": [
+            "Value #Input",
+            "Value #Output",
+            "Value #Total"
+          ],
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total Tokens"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(platform_cf_org_name, platform_cf_space_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\", platform_cf_service_instance_name=~\"$ServiceInstance\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Input"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(platform_cf_org_name, platform_cf_space_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\", platform_cf_service_instance_name=~\"$ServiceInstance\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Output"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(platform_cf_org_name, platform_cf_space_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\", platform_cf_service_instance_name=~\"$ServiceInstance\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Total"
+        }
+      ],
+      "title": "Billback Summary by Organization / Space",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 3,
+      "panels": [],
+      "title": "Detailed Billback Table",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": null
+      },
+      "description": "Detailed token usage breakdown by organization, space, model, and endpoint for billing purposes. Shows data for spaces with running apps (org/space name resolution via container metrics).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Input"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Input Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Output"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Output Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #Total"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Tokens"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.align",
+                "value": "right"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "gauge"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_org_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Organization"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_space_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Space"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ai_server_advertised_model"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "LLM Model"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ai_server_endpoint"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Endpoint / Plan"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_service_instance_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Service Instance Name"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_service_instance_guid"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Service Instance GUID"
+              },
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_space_guid"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "platform_cf_app_name"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "App / Service Key"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 4,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": true,
+          "fields": [
+            "Value #Input",
+            "Value #Output",
+            "Value #Total"
+          ],
+          "reducer": [
+            "sum"
+          ],
+          "show": true
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total Tokens"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(platform_cf_org_name, platform_cf_space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, platform_cf_service_instance_name, platform_cf_app_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"input\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\", platform_cf_service_instance_name=~\"$ServiceInstance\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Input"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(platform_cf_org_name, platform_cf_space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, platform_cf_service_instance_name, platform_cf_app_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type=\"output\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\", platform_cf_service_instance_name=~\"$ServiceInstance\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Output"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": null
+          },
+          "editorMode": "code",
+          "expr": "sum by(platform_cf_org_name, platform_cf_space_name, ai_server_advertised_model, ai_server_endpoint, platform_cf_space_guid, platform_cf_service_instance_guid, platform_cf_service_instance_name, platform_cf_app_name) (increase(ai_server_client_token_usage_total{gen_ai_token_type!=\"total\", ai_server_advertised_model=~\"$Model\", ai_server_endpoint=~\"$Endpoint\", platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\", platform_cf_service_instance_name=~\"$ServiceInstance\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "refId": "Total"
+        }
+      ],
+      "title": "Detailed Billback Breakdown",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": [
+    "Healthwatch",
+    "AI Services",
+    "Billback"
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "Organization",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "query": "label_values(ai_server_client_token_usage_total, platform_cf_org_name)",
+        "definition": "label_values(ai_server_client_token_usage_total, platform_cf_org_name)",
+        "refresh": 2,
+        "sort": 1,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "hide": 0
+      },
+      {
+        "name": "Space",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "query": "label_values(ai_server_client_token_usage_total{platform_cf_org_name=~\"$Organization\"}, platform_cf_space_name)",
+        "definition": "label_values(ai_server_client_token_usage_total{platform_cf_org_name=~\"$Organization\"}, platform_cf_space_name)",
+        "refresh": 2,
+        "sort": 1,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "hide": 0
+      },
+      {
+        "name": "ServiceInstance",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "query": "label_values(ai_server_client_token_usage_total{platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\"}, platform_cf_service_instance_name)",
+        "definition": "label_values(ai_server_client_token_usage_total{platform_cf_org_name=~\"$Organization\", platform_cf_space_name=~\"$Space\"}, platform_cf_service_instance_name)",
+        "refresh": 2,
+        "sort": 1,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "options": [],
+        "hide": 0
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
+        "definition": "label_values(ai_server_client_token_usage_total, ai_server_advertised_model)",
+        "description": "Filter by LLM model name.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "LLM Model",
+        "multi": true,
+        "name": "Model",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ai_server_client_token_usage_total, ai_server_advertised_model)",
+          "refId": "PrometheusVariableQueryEditor-Model"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query",
+        "allValue": ".*"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": null
+        },
+        "definition": "label_values(ai_server_client_token_usage_total, ai_server_endpoint)",
+        "description": "Filter by AI service endpoint (plan).",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Endpoint / Plan",
+        "multi": true,
+        "name": "Endpoint",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(ai_server_client_token_usage_total, ai_server_endpoint)",
+          "refId": "PrometheusVariableQueryEditor-Endpoint"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query",
+        "allValue": ".*"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "AI Services - Monthly Token Billback Report",
+  "uid": "hw2-ai-billback-report",
+  "version": 1,
+  "weekStart": ""
+}

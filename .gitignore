@@ -2,3 +2,8 @@
 ai-server-metrics-feature-request.md
 vm-model-health-metrics-feature-request.md
 tanzu-postgres-metrics-feature-request.md
+critical-metrics-gaps-spec.md
+jira-ai-server-cf-identity-labels.md
+jira-genai-vm-model-identity-labels.md
+jira-tanzu-postgres-cf-identity-labels.md
+ai-services-metrics-defense.md
